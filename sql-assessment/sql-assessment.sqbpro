@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="C:/Users/pebz3/Box Sync/Job Search (Resume)/PMGProgrammingChallenges/sql-assessment/sql-assessment.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="994"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><current_table name="4,14:mainmarketing_data"/><default_encoding codec=""/><browse_table_settings><table schema="main" name="campaign_info" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="63"/><column index="2" value="71"/><column index="3" value="52"/><column index="4" value="132"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="marketing_data" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="122"/><column index="2" value="88"/><column index="3" value="105"/><column index="4" value="46"/><column index="5" value="84"/><column index="6" value="46"/><column index="7" value="86"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="website_revenue" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="122"/><column index="2" value="88"/><column index="3" value="43"/><column index="4" value="62"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table></browse_table_settings></tab_browse><tab_sql><sql name="SQL 1">SELECT date, sum(impressions)
+FROM marketing_data
+GROUP BY date;</sql><sql name="SQL 2">SELECT state, sum(revenue)
+FROM website_revenue
+GROUP BY state
+ORDER BY sum(revenue) DESC
+LIMIT 3;</sql><sql name="SQL 3">SELECT name, total_cost, total_impressions, total_clicks, total_revenue
+FROM campaign_info
+JOIN (SELECT campaign_id as marketID, sum(cost) as total_cost, sum(impressions) as total_impressions, sum(clicks) as total_clicks
+	FROM marketing_data
+	GROUP BY campaign_id) ON marketID = id
+JOIN (SELECT campaign_id as webID, sum(revenue) as total_revenue
+	FROM website_revenue
+	GROUP BY campaign_id) ON webID = id
+ORDER BY name;</sql><sql name="SQL 4">SELECT geo, sum(conversions)
+FROM marketing_data
+WHERE campaign_id = 99058240
+GROUP BY geo;</sql><sql name="SQL 5">SELECT name, (total_cost / total_conversions) as cost_per_conversion, ((total_revenue - total_cost) / total_cost) as ROI
+FROM campaign_info
+JOIN (SELECT campaign_id as marketID, sum(cost) as total_cost, sum(conversions) as total_conversions
+	FROM marketing_data
+	GROUP BY campaign_id) ON marketID = id
+JOIN (SELECT campaign_id as webID, sum(revenue) as total_revenue
+	FROM website_revenue
+	GROUP BY campaign_id) ON webID = id
+ORDER BY cost_per_conversion;</sql><sql name="SQL 6">SELECT CASE CAST (strftime('%w', substr(date, 1, 10)) AS INTEGER)
+	WHEN 0 THEN 'Sunday'
+	WHEN 1 THEN 'Monday'
+	WHEN 2 THEN 'Tuesday'
+	WHEN 3 THEN 'Wednesday'
+	WHEN 4 THEN 'Thursday'
+	WHEN 5 THEN 'Friday'
+	ELSE 'Saturday' END as week_day,
+	sum(conversions) as total_conversions, sum(clicks) as total_clicks, sum(impressions) as total_impressions
+from marketing_data
+GROUP BY week_day
+ORDER BY total_conversions DESC;</sql><current_tab id="5"/></tab_sql></sqlb_project>
