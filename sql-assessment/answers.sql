@@ -40,7 +40,7 @@ JOIN (SELECT campaign_id as webID, sum(revenue) as total_revenue
 	FROM website_revenue
 	GROUP BY campaign_id) ON webID = id
 ORDER BY cost_per_conversion;
-   /* The most effecicient campaign would be the one with the minimum cost per conversion. This number makes campaign4 the most efficient.
+   /* The most efficient campaign would be the one with the minimum cost per conversion. This number makes campaign4 the most efficient.
    Another angle on efficiency could be to maximize ROI, which would make campaign5 the most efficient. campaign5 does have the highest cost per conversion,
    though. The ROI calculation assumes all revenue from the website is a direct result of the ad campaign, which may not be true, so I prioritized cost per conversion. */
 
